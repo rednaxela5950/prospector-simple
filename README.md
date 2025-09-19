@@ -52,9 +52,7 @@ Emerald Image Mesh is a proof-of-concept implementation of a peer-to-peer conten
 
 ### Demo
 
-![Emerald Image Mesh Screenshot](https://github.com/rednaxela5950/prospector-simple/raw/main/ScreenRecording.png)
-
-[Watch the demo video](https://github.com/rednaxela5950/prospector-simple/raw/main/ScreenRecording.mov)
+[Watch the demo video](https://github.com/rednaxela5950/prospector-simple/raw/refs/heads/master/ScreenRecording.mov)
 
 ### Architecture Overview
 
