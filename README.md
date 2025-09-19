@@ -39,7 +39,7 @@ Emerald Image Mesh is a proof-of-concept implementation of a peer-to-peer conten
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/emerald/emerald-image-mesh.git
+   git clone https://github.com/rednaxela5950/prospector-simple.git
    cd emerald-image-mesh
    ```
 
@@ -52,9 +52,9 @@ Emerald Image Mesh is a proof-of-concept implementation of a peer-to-peer conten
 
 ### Demo
 
-![Emerald Image Mesh Screenshot](https://github.com/emerald/emerald-image-mesh/raw/main/ScreenRecording.png)
+![Emerald Image Mesh Screenshot](https://github.com/rednaxela5950/prospector-simple/raw/main/ScreenRecording.png)
 
-[Watch the demo video](https://github.com/emerald/emerald-image-mesh/raw/main/ScreenRecording.mov)
+[Watch the demo video](https://github.com/rednaxela5950/prospector-simple/raw/main/ScreenRecording.mov)
 
 ### Architecture Overview
 
