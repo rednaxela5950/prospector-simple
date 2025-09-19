@@ -1,0 +1,211 @@
+# version: "3.9"
+
+services:
+  node-a:
+    build: ./p2p-node
+    container_name: node-a
+    environment:
+      - NODE_NAME=node-a
+      - HTTP_PORT=8080
+      - DATA_DIR=/data
+      - ENABLE_LOCAL_DISCOVERY=true
+      - PEER_HTTP_URLS=http://node-b:8080,http://node-c:8080
+      - LATENCY_MS_MIN=250
+      - LATENCY_MS_MAX=800
+      - STREAM_SLEEP_MS=150
+    ports:
+      - "4001:8080"    # HTTP for browser/UI
+    networks: [mesh]
+    volumes:
+      - node_a_data:/data
+
+  node-b:
+    build: ./p2p-node
+    container_name: node-b
+    environment:
+      - NODE_NAME=node-b
+      - HTTP_PORT=8080
+      - DATA_DIR=/data
+      - ENABLE_LOCAL_DISCOVERY=true
+      - PEER_HTTP_URLS=http://node-a:8080,http://node-c:8080
+      - LATENCY_MS_MIN=250
+      - LATENCY_MS_MAX=800
+      - STREAM_SLEEP_MS=150
+    ports:
+      - "4002:8080"
+    networks: [mesh]
+    volumes:
+      - node_b_data:/data
+
+  node-c:
+    build: ./p2p-node
+    container_name: node-c
+    environment:
+      - NODE_NAME=node-c
+      - HTTP_PORT=8080
+      - DATA_DIR=/data
+      - ENABLE_LOCAL_DISCOVERY=true
+      - PEER_HTTP_URLS=http://node-a:8080,http://node-b:8080
+      - LATENCY_MS_MIN=250
+      - LATENCY_MS_MAX=800
+      - STREAM_SLEEP_MS=150
+    ports:
+      - "4003:8080"
+    networks: [mesh]
+    volumes:
+      - node_c_data:/data
+
+  node-d:
+    build: ./p2p-node
+    container_name: node-d
+    environment:
+      - NODE_NAME=node-d
+      - HTTP_PORT=8080
+      - DATA_DIR=/data
+      - ENABLE_LOCAL_DISCOVERY=true
+      - PEER_HTTP_URLS=http://node-b:8080,http://node-c:8080
+      - LATENCY_MS_MIN=250
+      - LATENCY_MS_MAX=800
+      - STREAM_SLEEP_MS=150
+    ports:
+      - "4004:8080"
+    networks: [mesh]
+    volumes:
+      - node_d_data:/data
+
+  node-e:
+    build: ./p2p-node
+    container_name: node-e
+    environment:
+      - NODE_NAME=node-e
+      - HTTP_PORT=8080
+      - DATA_DIR=/data
+      - ENABLE_LOCAL_DISCOVERY=true
+      - PEER_HTTP_URLS=http://node-c:8080,http://node-d:8080
+      - LATENCY_MS_MIN=250
+      - LATENCY_MS_MAX=800
+      - STREAM_SLEEP_MS=150
+    ports:
+      - "4005:8080"
+    networks: [mesh]
+    volumes:
+      - node_e_data:/data
+
+  node-f:
+    build: ./p2p-node
+    container_name: node-f
+    environment:
+      - NODE_NAME=node-f
+      - HTTP_PORT=8080
+      - DATA_DIR=/data
+      - ENABLE_LOCAL_DISCOVERY=true
+      - PEER_HTTP_URLS=http://node-d:8080,http://node-e:8080
+      - LATENCY_MS_MIN=250
+      - LATENCY_MS_MAX=800
+      - STREAM_SLEEP_MS=150
+    ports:
+      - "4006:8080"
+    networks: [mesh]
+    volumes:
+      - node_f_data:/data
+
+  node-g:
+    build: ./p2p-node
+    container_name: node-g
+    environment:
+      - NODE_NAME=node-g
+      - HTTP_PORT=8080
+      - DATA_DIR=/data
+      - ENABLE_LOCAL_DISCOVERY=true
+      - PEER_HTTP_URLS=http://node-e:8080,http://node-f:8080
+      - LATENCY_MS_MIN=250
+      - LATENCY_MS_MAX=800
+      - STREAM_SLEEP_MS=150
+    ports:
+      - "4007:8080"
+    networks: [mesh]
+    volumes:
+      - node_g_data:/data
+
+  node-h:
+    build: ./p2p-node
+    container_name: node-h
+    environment:
+      - NODE_NAME=node-h
+      - HTTP_PORT=8080
+      - DATA_DIR=/data
+      - ENABLE_LOCAL_DISCOVERY=true
+      - PEER_HTTP_URLS=http://node-f:8080,http://node-g:8080
+      - LATENCY_MS_MIN=250
+      - LATENCY_MS_MAX=800
+      - STREAM_SLEEP_MS=150
+    ports:
+      - "4008:8080"
+    networks: [mesh]
+    volumes:
+      - node_h_data:/data
+
+  node-i:
+    build: ./p2p-node
+    container_name: node-i
+    environment:
+      - NODE_NAME=node-i
+      - HTTP_PORT=8080
+      - DATA_DIR=/data
+      - ENABLE_LOCAL_DISCOVERY=true
+      - PEER_HTTP_URLS=http://node-g:8080,http://node-h:8080
+      - LATENCY_MS_MIN=250
+      - LATENCY_MS_MAX=800
+      - STREAM_SLEEP_MS=150
+    ports:
+      - "4009:8080"
+    networks: [mesh]
+    volumes:
+      - node_i_data:/data
+
+  node-j:
+    build: ./p2p-node
+    container_name: node-j
+    environment:
+      - NODE_NAME=node-j
+      - HTTP_PORT=8080
+      - DATA_DIR=/data
+      - ENABLE_LOCAL_DISCOVERY=true
+      - PEER_HTTP_URLS=http://node-h:8080,http://node-i:8080
+      - LATENCY_MS_MIN=250
+      - LATENCY_MS_MAX=800
+      - STREAM_SLEEP_MS=150
+    ports:
+      - "4010:8080"
+    networks: [mesh]
+    volumes:
+      - node_j_data:/data
+
+  mesh-ui:
+    working_dir: /app
+    image: node:20-alpine
+    container_name: mesh-ui
+    command: sh -c "if [ -f package-lock.json ]; then npm ci; else npm install; fi && npm run dev -- --host"
+    volumes:
+      - ./ui:/app
+    environment:
+      # The UI calls the nodes on localhost:* (exposed above)
+      - VITE_NODES_JSON='[{"id":"node-a","url":"http://localhost:4001"},{"id":"node-b","url":"http://localhost:4002"},{"id":"node-c","url":"http://localhost:4003"},{"id":"node-d","url":"http://localhost:4004"},{"id":"node-e","url":"http://localhost:4005"},{"id":"node-f","url":"http://localhost:4006"},{"id":"node-g","url":"http://localhost:4007"},{"id":"node-h","url":"http://localhost:4008"},{"id":"node-i","url":"http://localhost:4009"},{"id":"node-j","url":"http://localhost:4010"}]'
+    ports:
+      - "5173:5173"
+    networks: [mesh]
+
+networks:
+  mesh: {}
+
+volumes:
+  node_a_data: {}
+  node_b_data: {}
+  node_c_data: {}
+  node_d_data: {}
+  node_e_data: {}
+  node_f_data: {}
+  node_g_data: {}
+  node_h_data: {}
+  node_i_data: {}
+  node_j_data: {}
